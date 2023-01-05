@@ -6,6 +6,9 @@ import {
   Paper,
   TextField,
   TablePagination,
+  TableHead,
+  TableCell,
+  TableRow,
 } from "@mui/material";
 
 export interface Product {
@@ -38,8 +41,8 @@ export const ProductsList = () => {
           const response = await fetch(
             `https://reqres.in/api/products?page=${page}&per_page=${perPage}`
           );
-          const data = await response.json();
-          products = products.concat(data.data);
+          const productsData = await response.json();
+          products = products.concat(productsData.data);
           page += 1;
         } catch (error) {
           if (error instanceof Error) {
@@ -68,7 +71,10 @@ export const ProductsList = () => {
     }
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+    newPage: number
+  ) => {
     setPage(newPage);
   };
 
@@ -82,10 +88,17 @@ export const ProductsList = () => {
         label="Filter by ID"
         value={id}
         onChange={handleIdChange}
-        sx={{ mb: 10, backgroundColor: "whitesmoke" }}
+        sx={{ mb: 10, backgroundColor: "whitesmoke", borderRadius: "10px" }}
       />
-      <Paper>
-        <Table>
+      <Paper sx={{ borderRadius: "10px" }}>
+        <Table sx={{ width: "500px", height: "300px" }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Year</TableCell>
+            </TableRow>
+          </TableHead>
           <TableBody>
             {filteredProducts
               ?.slice(page * rowsPerPage, (page + 1) * rowsPerPage)
